@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+    <title>CopyCrush - Swipe. SuperLike. Copy Trade.</title>
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* prevent scrolling on body */
+      }
+
+      #vanta-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1; /* behind React app */
+      }
+
+      #root {
+        position: relative;
+        z-index: 1;
+        height: 100vh;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Vanta background container -->
+    <div id="vanta-bg"></div>
+
+    <!-- Your React app mounts here -->
+    <div id="root"></div>
+
+    <!-- Your app logic -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          VANTA.BIRDS({
+            el: "#vanta-bg", // apply to vanta-bg, NOT body
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00
+          });
+        }, 100);
+      });
+    </script>
+  </body>
+</html>
