@@ -38,7 +38,7 @@ const ZKProofGenerator: React.FC<ZKProofGeneratorProps> = ({ traderProfile, onPr
   
   // Citrea testnet configuration
   const CITREA_RPC = 'https://rpc.testnet.citrea.xyz';
-  const VERIFIER_CONTRACT_ADDRESS = '0x...'; // Replace with your deployed contract address
+  const VERIFIER_CONTRACT_ADDRESS = '0x0eb7B36996Ff2c55D1376D3E85287935Cc8CD617'; // Replace with your deployed contract address
   
   // Verifier contract ABI
   const VERIFIER_ABI = [
