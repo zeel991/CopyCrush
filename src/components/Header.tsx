@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Bitcoin, Heart, Wallet } from 'lucide-react';
 
+// Extend Window interface to include ethereum
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 const Header = () => {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -17,6 +24,11 @@ const Header = () => {
         throw new Error('MetaMask is not installed. Please install MetaMask extension.');
       }
 
+      // Check if MetaMask is the active provider
+      if (!window.ethereum.isMetaMask) {
+        console.warn('MetaMask not detected as primary provider');
+      }
+
       // Request account access
       const accounts = await window.ethereum.request({ 
         method: 'eth_requestAccounts' 
@@ -27,10 +39,19 @@ const Header = () => {
       }
 
       setWalletAddress(accounts[0]);
+      setError(null);
 
     } catch (err: any) {
       console.error('MetaMask connection error:', err);
-      setError(err.message || 'Failed to connect to MetaMask');
+      
+      // Handle specific error types
+      if (err.code === 4001) {
+        setError('Connection request was rejected by user');
+      } else if (err.code === -32002) {
+        setError('Connection request is already pending. Please check MetaMask.');
+      } else {
+        setError(err.message || 'Failed to connect to MetaMask');
+      }
     } finally {
       setIsConnecting(false);
     }
@@ -45,41 +66,66 @@ const Header = () => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
+  // Check if MetaMask is installed
+  const checkMetaMaskInstalled = () => {
+    return typeof window !== 'undefined' && 
+           typeof window.ethereum !== 'undefined' && 
+           window.ethereum.isMetaMask;
+  };
+
   // Auto-connect logic - check if already connected
   useEffect(() => {
     const checkExistingConnection = async () => {
-      if (window.ethereum) {
-        try {
-          const accounts = await window.ethereum.request({ 
-            method: 'eth_accounts' 
-          });
-          if (accounts && accounts.length > 0) {
-            setWalletAddress(accounts[0]);
-          }
-        } catch (error) {
-          console.log('Auto-connect failed:', error);
+      // Wait a bit for MetaMask to initialize
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (!checkMetaMaskInstalled()) {
+        console.log('MetaMask not detected');
+        return;
+      }
+
+      try {
+        const accounts = await window.ethereum.request({ 
+          method: 'eth_accounts' 
+        });
+        
+        if (accounts && accounts.length > 0) {
+          setWalletAddress(accounts[0]);
+          console.log('Auto-connected to:', accounts[0]);
         }
+      } catch (error) {
+        console.log('Auto-connect failed:', error);
       }
     };
 
     checkExistingConnection();
 
     // Listen for account changes
-    if (window.ethereum) {
+    if (checkMetaMaskInstalled()) {
       const handleAccountsChanged = (accounts: string[]) => {
+        console.log('Accounts changed:', accounts);
         if (accounts.length > 0) {
           setWalletAddress(accounts[0]);
+          setError(null);
         } else {
           setWalletAddress(null);
         }
       };
 
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      const handleChainChanged = (chainId: string) => {
+        console.log('Chain changed:', chainId);
+        // Optionally reload the page or update UI
+        window.location.reload();
+      };
 
-      // Cleanup listener
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('chainChanged', handleChainChanged);
+
+      // Cleanup listeners
       return () => {
-        if (window.ethereum) {
+        if (window.ethereum && window.ethereum.removeListener) {
           window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+          window.ethereum.removeListener('chainChanged', handleChainChanged);
         }
       };
     }
@@ -113,21 +159,37 @@ const Header = () => {
 
         {/* Wallet Connection */}
         <div className="relative">
-          <button
-            onClick={walletAddress ? disconnectWallet : connectMetaMask}
-            disabled={isConnecting}
-            className="flex items-center space-x-2 px-4 py-2 border border-orange-500 rounded-full text-orange-400 hover:bg-orange-500 hover:text-white transition-all duration-300 disabled:opacity-70"
-          >
-            <Wallet size={18} />
-            <span>
-              {isConnecting 
-                ? 'Connecting...' 
-                : walletAddress 
-                  ? `${shortenAddress(walletAddress)}`
-                  : 'Connect MetaMask'
-              }
-            </span>
-          </button>
+          {/* Show install MetaMask message if not detected */}
+          {!checkMetaMaskInstalled() && !walletAddress && (
+            <a
+              href="https://metamask.io/download/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 px-4 py-2 border border-red-500 rounded-full text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300"
+            >
+              <Wallet size={18} />
+              <span>Install MetaMask</span>
+            </a>
+          )}
+
+          {/* Normal connect/disconnect button */}
+          {checkMetaMaskInstalled() && (
+            <button
+              onClick={walletAddress ? disconnectWallet : connectMetaMask}
+              disabled={isConnecting}
+              className="flex items-center space-x-2 px-4 py-2 border border-orange-500 rounded-full text-orange-400 hover:bg-orange-500 hover:text-white transition-all duration-300 disabled:opacity-70"
+            >
+              <Wallet size={18} />
+              <span>
+                {isConnecting 
+                  ? 'Connecting...' 
+                  : walletAddress 
+                    ? `${shortenAddress(walletAddress)}`
+                    : 'Connect MetaMask'
+                }
+              </span>
+            </button>
+          )}
 
           {/* Error Display */}
           {error && (
