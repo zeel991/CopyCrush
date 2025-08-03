@@ -1,6 +1,7 @@
 // components/ZKProofGenerator.tsx
 import React, { useState, useEffect } from 'react';
 import { Shield, Check, AlertCircle, Loader, ExternalLink, Wallet } from 'lucide-react';
+import { ethers } from 'ethers';
 
 interface TraderProfile {
   name: string;
@@ -50,9 +51,9 @@ const ZKProofGenerator: React.FC<ZKProofGeneratorProps> = ({ traderProfile, onPr
   }, []);
 
   const checkWalletConnection = async () => {
-    if (typeof window !== 'undefined' && window.ethereum) {
+    if (typeof window !== 'undefined' && (window as any).ethereum) {
       try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
           setWalletConnected(true);
           setWalletAddress(accounts[0]);
@@ -64,15 +65,15 @@ const ZKProofGenerator: React.FC<ZKProofGeneratorProps> = ({ traderProfile, onPr
   };
 
   const connectWallet = async () => {
-    if (typeof window !== 'undefined' && window.ethereum) {
+    if (typeof window !== 'undefined' && (window as any).ethereum) {
       try {
-        const accounts = await window.ethereum.request({ 
+        const accounts = await (window as any).ethereum.request({ 
           method: 'eth_requestAccounts' 
         });
         
         // Add/Switch to Citrea testnet
         try {
-          await window.ethereum.request({
+          await (window as any).ethereum.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: '0x139B' }], // Citrea testnet chain ID (5019)
           });
@@ -80,7 +81,7 @@ const ZKProofGenerator: React.FC<ZKProofGeneratorProps> = ({ traderProfile, onPr
           // This error code indicates that the chain has not been added to MetaMask
           if (switchError.code === 4902) {
             try {
-              await window.ethereum.request({
+              await (window as any).ethereum.request({
                 method: 'wallet_addEthereumChain',
                 params: [
                   {
@@ -175,12 +176,12 @@ const ZKProofGenerator: React.FC<ZKProofGeneratorProps> = ({ traderProfile, onPr
     }
 
     try {
-      // Initialize ethers with MetaMask provider
-      const provider = new (window as any).ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
+      // Initialize ethers with MetaMask provider (v5 syntax)
+      const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+      const signer = provider.getSigner();
       
       // Create contract instance
-      const contract = new (window as any).ethers.Contract(
+      const contract = new ethers.Contract(
         VERIFIER_CONTRACT_ADDRESS,
         VERIFIER_ABI,
         signer
@@ -266,7 +267,8 @@ const ZKProofGenerator: React.FC<ZKProofGeneratorProps> = ({ traderProfile, onPr
 
     } catch (error) {
       console.error('Error generating proof:', error);
-      alert(`Error: ${error instanceof Error ? error.message : String(error)}`);    } finally {
+      alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
       setIsGenerating(false);
       setIsVerifying(false);
     }
