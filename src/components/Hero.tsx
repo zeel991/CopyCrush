@@ -129,13 +129,9 @@ const DraggableCard: React.FC<DraggableCardProps> = ({
 
 const Hero = () => {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 relative overflow-hidden">
-      {/* Background Animation */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-20 h-20 bg-orange-500/20 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-16 h-16 bg-blue-500/20 rounded-full animate-pulse delay-1000"></div>
-        <div className="absolute bottom-32 left-1/4 w-24 h-24 bg-orange-400/10 rounded-full animate-pulse delay-500"></div>
-      </div>
+    <section className="min-h-screen relative overflow-hidden">
+      {/* Subtle overlay for text readability */}
+      <div className="absolute inset-0 bg-black/30 z-0"></div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         {/* Logo/Brand */}
@@ -153,14 +149,14 @@ const Hero = () => {
 
         {/* Main Content */}
         <div className="text-center max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
             Swipe. SuperLike. <br />
             <span className="bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
               Copy Trade.
             </span>
           </h2>
           
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto drop-shadow-md">
             The dating app for Bitcoin traders — built on <span className="text-orange-400 font-semibold">Citrea</span>. 
             Swipe through traders, SuperLike the best, and copy their moves. 📈✨
           </p>
@@ -171,9 +167,9 @@ const Hero = () => {
               <Zap className="w-5 h-5 inline-block mr-2 group-hover:animate-bounce" />
               Try the Demo
             </Link>
-            <Link to="/register-trader" className="px-8 py-4 border-2 border-orange-500 rounded-full font-bold text-lg transition-all duration-300 hover:bg-orange-500 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/25">
-  Register as a Trader
-</Link>
+            <Link to="/register-trader" className="px-8 py-4 border-2 border-orange-500 rounded-full font-bold text-lg transition-all duration-300 hover:bg-orange-500 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/25 text-white backdrop-blur-sm">
+              Register as a Trader
+            </Link>
           </div>
 
           {/* Draggable Cards Container - Fixed container bounds */}
@@ -184,7 +180,7 @@ const Hero = () => {
                 
                 {/* Back Card */}
                 <DraggableCard initialRotation={12} zIndex={1}>
-                  <div className="w-64 h-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-600 p-6 shadow-2xl hover:shadow-3xl transition-shadow duration-300">
+                  <div className="w-64 h-80 bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-md rounded-2xl border border-gray-600 p-6 shadow-2xl hover:shadow-3xl transition-shadow duration-300">
                     <div className="flex items-center mb-4">
                       <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
                         <span className="text-white font-bold">₿</span>
@@ -207,7 +203,7 @@ const Hero = () => {
                 
                 {/* Middle Card */}
                 <DraggableCard initialRotation={-6} zIndex={2}>
-                  <div className="w-64 h-80 bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl border border-gray-500 p-6 shadow-2xl hover:shadow-3xl transition-shadow duration-300">
+                  <div className="w-64 h-80 bg-gradient-to-br from-gray-700/90 to-gray-800/90 backdrop-blur-md rounded-2xl border border-gray-500 p-6 shadow-2xl hover:shadow-3xl transition-shadow duration-300">
                     <div className="flex items-center mb-4">
                       <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
                         <span className="text-white font-bold">Ξ</span>

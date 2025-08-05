@@ -4,14 +4,14 @@ import { Bitcoin, Heart, MessageCircle, Zap } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 border-t border-gray-800">
+    <footer className="border-t border-white/10 backdrop-blur-sm">
       {/* CTA Section */}
-      <div className="py-20 bg-gradient-to-r from-orange-500/10 to-pink-500/10">
+      <div className="py-20 bg-gradient-to-r from-orange-500/20 to-pink-500/20 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
             Join the <span className="bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">Movement</span>
           </h2>
-          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
             Become a Bapper and discover the future of social trading. Your trading soulmate is just a swipe away! 💫
           </p>
           
@@ -20,7 +20,7 @@ const Footer = () => {
               <Zap className="w-5 h-5 inline-block mr-2 group-hover:animate-bounce" />
               Try Demo
             </Link>
-            <button className="group px-8 py-4 border-2 border-blue-500 rounded-full font-bold text-lg transition-all duration-300 hover:bg-blue-500 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25">
+            <button className="group px-8 py-4 border-2 border-blue-500 rounded-full font-bold text-lg transition-all duration-300 hover:bg-blue-500 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 text-white backdrop-blur-sm">
               <MessageCircle className="w-5 h-5 inline-block mr-2 group-hover:animate-pulse" />
               Join Telegram
             </button>
@@ -29,7 +29,7 @@ const Footer = () => {
       </div>
 
       {/* Footer Content */}
-      <div className="py-12">
+      <div className="py-12 bg-black/30 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center">
             {/* Logo */}
@@ -44,7 +44,7 @@ const Footer = () => {
             </div>
 
             {/* Navigation Links */}
-            <nav className="flex flex-wrap justify-center gap-8 mb-8 text-gray-400">
+            <nav className="flex flex-wrap justify-center gap-8 mb-8 text-white/70">
               <a href="#" className="hover:text-orange-400 transition-colors">About</a>
               <a href="#" className="hover:text-orange-400 transition-colors">How it Works</a>
               <a href="#" className="hover:text-orange-400 transition-colors">Traders</a>
@@ -55,22 +55,22 @@ const Footer = () => {
 
             {/* Social Links */}
             <div className="flex space-x-6 mb-8">
-              <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
+              <a href="#" className="text-white/70 hover:text-orange-400 transition-colors">
                 <span className="text-2xl">𝕏</span>
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
+              <a href="#" className="text-white/70 hover:text-orange-400 transition-colors">
                 <span className="text-2xl">📱</span>
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
+              <a href="#" className="text-white/70 hover:text-orange-400 transition-colors">
                 <span className="text-2xl">💬</span>
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
+              <a href="#" className="text-white/70 hover:text-orange-400 transition-colors">
                 <span className="text-2xl">🤖</span>
               </a>
             </div>
 
             {/* Copyright */}
-            <div className="text-center text-gray-500 border-t border-gray-800 pt-8 w-full">
+            <div className="text-center text-white/60 border-t border-white/10 pt-8 w-full">
               <p className="mb-2">
                 © 2025 CopyCrush. Built with 💜 on Citrea. All rights reserved.
               </p>
